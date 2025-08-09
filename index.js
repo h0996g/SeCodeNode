@@ -12,9 +12,15 @@ const {
   getEntity,
   getStudents,
   updateEntity,
+  createCourse,
+  getCourses,
+  getTeacherCourses,
+  updateCourse,
+  deleteCourse,
 } = require("./controllers/apiController");
 const verifyToken = require("./middlewares/verifyToken");
 const upload = require("./middlewares/imageUpload");
+const lessonUpload = require("./middlewares/lessonImageUpload");
 
 const app = express();
 app.use(express.json());
@@ -42,6 +48,13 @@ app.post("/api/auth", authController);
 app.get("/api/entity", verifyToken, getEntity);
 app.get("/api/students", verifyToken, getStudents);
 app.put("/api/entity", verifyToken, upload, updateEntity);
+
+// --- Course Routes ---
+app.post("/api/courses", verifyToken, lessonUpload, createCourse);
+app.get("/api/courses", getCourses);
+app.get("/api/courses/my", verifyToken, getTeacherCourses);
+app.put("/api/courses/:courseId", verifyToken, lessonUpload, updateCourse);
+app.delete("/api/courses/:courseId", verifyToken, deleteCourse);
 
 // --- MongoDB Connection ---
 const MONGO_URI = process.env.MONGO_URI;
